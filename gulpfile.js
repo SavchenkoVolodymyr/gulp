@@ -1,12 +1,14 @@
 const gulp = require('gulp');
 const fileInclude = require('gulp-file-include');
-const sass = require ('gulp-sass')(require('sass'));
-const server = require ('gulp-server-livereload');
-const clean = require ('gulp-clean');
+const sass = require('gulp-sass')(require('sass'));
+const server = require('gulp-server-livereload');
+const clean = require('gulp-clean');
 const fs = require('fs');
-const sourceMaps = require ('gulp-sourcemaps');
-const plumber = require ('gulp-plumber');
-const notify = require ('gulp-notify');
+const sourceMaps = require('gulp-sourcemaps');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
+
+const webpack = require('webpack-stream');
 
 
 gulp.task('clean', function(done){
@@ -17,16 +19,20 @@ gulp.task('clean', function(done){
     }
     done();
 });
-const plumberHtmlConfig = {
-      errorHandler: notify.onError({
-        title: 'HTML',
+
+const plumberNotify = (title) => {
+return {
+    errorHandler: notify.onError({
+        title: title,
         message: 'Error', 
-        sound: false
-    })
+        sound: false,
+    }),
 };
+};
+
 gulp.task('html', function(){
     return gulp.src('./src/*.html')
-    .pipe(plumber(plumberHtmlConfig))
+    .pipe(plumber(plumberNotify('HTML')))
     .pipe(fileInclude({
         prefix: '@@',
         basepath: '@file'
@@ -34,16 +40,9 @@ gulp.task('html', function(){
     .pipe(gulp.dest('./dist'))
 });
 
-const plumberSassConfig = {
-    errorHandler: notify.onError({
-        title: 'Styles',
-        message: 'Error', 
-        sound: false
-    })
-};
 gulp.task('sass', function(){
     return gulp.src('./src/scss/*.scss')
-    .pipe(plumber(plumberSassConfig))
+    .pipe(plumber(plumberNotify('SCSS')))
     .pipe(sourceMaps.init())
     .pipe(sass())
     .pipe(sourceMaps.write())
@@ -72,19 +71,28 @@ gulp.task('server', function(){
     }))
 });
 
+gulp.task('js', function(){
+    return gulp.src('./src/js/*.js')
+    .pipe(plumber(plumberNotify('JS')))
+    .pipe(webpack(require('./webpack.config.js')))
+    .pipe(gulp.dest('./dist/js'));
+})
+
 gulp.task('watch', function(){
     gulp.watch('./src/scss/**/*.scss', gulp.parallel('sass'));
     gulp.watch('./src/**/*.html', gulp.parallel('html'));
-    gulp.watch('./src/img//**/*', gulp.parallel('images'));
-    gulp.watch('./src/fonts//**/*', gulp.parallel('fonts'));
-    gulp.watch('./src/files//**/*', gulp.parallel('files'));
+    gulp.watch('./src/img/**/*', gulp.parallel('images'));
+    gulp.watch('./src/fonts/**/*', gulp.parallel('fonts'));
+    gulp.watch('./src/files/**/*', gulp.parallel('files'));
+    gulp.watch('./src/js/**/*.js', gulp.parallel('js'));
 });
 
 gulp.task('default', gulp.series(
     'clean',
-     gulp.parallel('html', 'sass', 'images', 'fonts', 'files'),
+     gulp.parallel('html', 'sass', 'images', 'fonts', 'files', 'js'),
      gulp.parallel('server', 'watch')
 ));
+
 
 
 
