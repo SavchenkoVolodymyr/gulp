@@ -1,10 +1,15 @@
 {
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
     "css-loader": "^7.1.2",
     "gulp": "^5.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-changed": "^5.0.4",
     "gulp-clean": "^0.4.0",
     "gulp-file-include": "^2.3.0",
     "gulp-group-css-media-queries": "^1.2.2",
+    "gulp-imagemin": "^7.1.0",
     "gulp-notify": "^5.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-sass": "^6.0.1",
@@ -12,12 +17,9 @@
     "gulp-sourcemaps": "^3.0.0",
     "sass": "^1.93.3",
     "style-loader": "^4.0.0",
-    "webpack-stream": "^7.0.0",
-     "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
-    "gulp-babel": "^8.0.0"
+    "webpack-stream": "^7.0.0"
   },
-  "babel":{
+  "babel": {
     "presets": [
       "@babel/preset-env"
     ]
