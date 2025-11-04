@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const fileInclude = require('gulp-file-include');
 const sass = require('gulp-sass')(require('sass'));
+const sassGlob = require('gulp-sass-glob');
 const server = require('gulp-server-livereload');
 const clean = require('gulp-clean');
 const fs = require('fs');
@@ -11,7 +12,7 @@ const notify = require('gulp-notify');
 const webpack = require('webpack-stream');
 const babel = require('gulp-babel');
 const imagemin = require('gulp-imagemin');
-const changed = require('gulp-changed');
+
 
 
 gulp.task('clean', function(done){
@@ -35,8 +36,7 @@ return {
 
 gulp.task('html', function(){
     return gulp
-    .src('./src/*.html')
-    // .pipe(changed('./dist/'))
+    .src(['./src/html/**/*.html', '!./src/html/blocks/*.html' ])
     .pipe(plumber(plumberNotify('HTML')))
     .pipe(fileInclude({
         prefix: '@@',
@@ -48,9 +48,9 @@ gulp.task('html', function(){
 gulp.task('sass', function(){
     return gulp
     .src('./src/scss/*.scss')
-    //  .pipe(changed('./dist/css/'))
     .pipe(plumber(plumberNotify('SCSS')))
     .pipe(sourceMaps.init())
+    .pipe(sassGlob())
     .pipe(sass())
     .pipe(sourceMaps.write())
     .pipe(gulp.dest('./dist/css/'))
@@ -58,7 +58,6 @@ gulp.task('sass', function(){
 
 gulp.task('images', function(){
     return gulp.src('./src/img/**/*')
-    // .pipe(changed('./dist/img/'))
     .pipe(imagemin({verbose: true }))
     .pipe(gulp.dest('./dist/img/'))
 });
@@ -92,8 +91,6 @@ gulp.task('js', function(){
     .pipe(webpack(require('./webpack.config.js')))
     .pipe(gulp.dest('./dist/js'));
 })
-
-
 
 
 gulp.task('watch', function(){
