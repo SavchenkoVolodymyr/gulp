@@ -9,6 +9,7 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 
 const webpack = require('webpack-stream');
+const babel = require('gulp-babel');
 
 
 gulp.task('clean', function(done){
@@ -74,9 +75,12 @@ gulp.task('server', function(){
 gulp.task('js', function(){
     return gulp.src('./src/js/*.js')
     .pipe(plumber(plumberNotify('JS')))
+    .pipe(babel())
     .pipe(webpack(require('./webpack.config.js')))
     .pipe(gulp.dest('./dist/js'));
 })
+
+
 
 gulp.task('watch', function(){
     gulp.watch('./src/scss/**/*.scss', gulp.parallel('sass'));
