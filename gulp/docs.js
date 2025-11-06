@@ -3,6 +3,7 @@ const gulp = require('gulp');
 //html
 const htmlclean = require('gulp-htmlclean');
 const fileInclude = require('gulp-file-include');
+const webpHTML = require('gulp-webp-html');
 
 //sass
 const sass = require('gulp-sass')(require('sass'));
@@ -10,6 +11,7 @@ const autoprefixer = require('gulp-autoprefixer').default;
 const csso = require('gulp-csso');
 const groupMedia = require('gulp-group-css-media-queries');
 const sassGlob = require('gulp-sass-glob');
+const webpCss = require('gulp-webp-css');
 
 
 const server = require('gulp-server-livereload');
@@ -58,6 +60,7 @@ gulp.task('html:docs', function(){
         prefix: '@@',
         basepath: '@file'
     }))
+    .pipe(webpHTML())
     .pipe(htmlclean())
     .pipe(gulp.dest('./docs'))
 });
@@ -70,6 +73,7 @@ gulp.task('sass:docs', function(){
     .pipe(sourceMaps.init())
     .pipe(autoprefixer())
     .pipe(sassGlob())
+    .pipe(webpCss())
     .pipe(groupMedia())
     .pipe(sass())
     .pipe(csso())
