@@ -52,6 +52,7 @@ return {
 gulp.task('html:docs', function(){
     return gulp
     .src(['./src/html/**/*.html', '!./src/html/blocks/*.html' ])
+    .pipe(changed('./docs/'))
     .pipe(plumber(plumberNotify('HTML')))
     .pipe(fileInclude({
         prefix: '@@',
@@ -64,6 +65,7 @@ gulp.task('html:docs', function(){
 gulp.task('sass:docs', function(){
     return gulp
     .src('./src/scss/*.scss')
+    .pipe(changed('./docs/css/'))
     .pipe(plumber(plumberNotify('SCSS')))
     .pipe(sourceMaps.init())
     .pipe(autoprefixer())
@@ -90,12 +92,14 @@ gulp.task('images:docs', function () {
 gulp.task('fonts:docs', function(){
     return gulp
     .src('./src/fonts/**/*')
+    .pipe(changed('./docs/fonts/'))
     .pipe(gulp.dest('./docs/fonts/'))
 });
 
 gulp.task('files:docs', function(){
     return gulp
     .src('./src/files/**/*')
+    .pipe(changed('./docs/files/'))
     .pipe(gulp.dest('./docs/files/'))
 });
 
@@ -109,6 +113,7 @@ gulp.task('server:docs', function(){
 gulp.task('js:docs', function(){
     return gulp
     .src('./src/js/*.js')
+    .pipe(changed('./docs/js/'))
     .pipe(plumber(plumberNotify('JS')))
     .pipe(babel())
     .pipe(webpack(require('../webpack.config.js')))
