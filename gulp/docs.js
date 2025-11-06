@@ -18,6 +18,7 @@ const fs = require('fs');
 const sourceMaps = require('gulp-sourcemaps');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
+const changed = require('gulp-changed');
 
 const webpack = require('webpack-stream');
 const babel = require('gulp-babel');
@@ -74,13 +75,16 @@ gulp.task('sass:docs', function(){
     .pipe(gulp.dest('./docs/css/'))
 });
 
-gulp.task('images:docs', function(){
-    return gulp.src('./src/img/**/*')
-    .pipe(webp())
-    .pipe(gulp.dest('./docs/img/'))
-    .gulp.src('./src/img/**/*')
-    .pipe(imagemin({verbose: true }))
-    .pipe(gulp.dest('./docs/img/'));
+gulp.task('images:docs', function () {
+	return gulp
+		.src('./src/img/**/*')
+		.pipe(changed('./docs/img/'))
+		.pipe(webp())
+		.pipe(gulp.dest('./docs/img/'))
+		.pipe(gulp.src('./src/img/**/*'))
+		.pipe(changed('./docs/img/'))
+		.pipe(imagemin({ verbose: true }))
+		.pipe(gulp.dest('./docs/img/'));
 });
 
 gulp.task('fonts:docs', function(){
