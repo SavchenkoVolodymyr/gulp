@@ -1,10 +1,21 @@
 /* Base */
-@import "./base/reset";
-@import "./base/vars";
-@import "./base/base";
-@import "./base/utils";
-@import "./base/containers";
-@import "./base/sticky-footer";
+// @import "./base/reset";
+@use "./base/reset" as *;
+// @import "./base/vars";
+@use "./base/vars" as *;
+// @import "./base/base";
+@use "./base/_base" as *;
+// @import "./base/utils";
+@use "./base/utils" as *;
+// @import "./base/containers";
+@use "./base/containers" as *;
+// @import "./base/sticky-footer";
+@use "./base/sticky-footer" as *;
 
 /* Blocks */
-@import "./blocks/*.scss";
+// @import "./blocks/*.scss";
+@use "./blocks/footer" as *;
+@use "./blocks/header" as *;
+@use "./blocks/logo" as *;
+@use "./blocks/mobile-nav" as *;
+@use "./blocks/nav-icon" as *;
